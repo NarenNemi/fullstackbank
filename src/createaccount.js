@@ -1,12 +1,16 @@
-import { Card } from "./context";
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { React, UserContext } from "react";
-import { auth } from "./firebase-confing";
+import { Card, UserContext } from "./context";
+import {useState, useContext } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "./firebase-confing";
+import { collection, addDoc } from "firebase/firestore"; 
 
- 
+
+
  export function CreateAccount(){
-  const [show, setShow]     = React.useState(true);
-  const [status, setStatus] = React.useState('');
+  const [show, setShow]     = useState(true);
+  const [status, setStatus] = useState('');
+  //const [token, setToken] = useState('');
+  
   return (
     <Card
       bgcolor="primary"
@@ -28,27 +32,44 @@ function CreateMsg(props){
 }
 
 function CreateForm(props){
-  const [name, setName]         = React.useState('');
-  const [email, setEmail]       = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [balance, setBalance]   = React.useState(0);
-  
-  const ctx = React.useContext(UserContext);
+  const [name, setName]         = useState('');
+  const [email, setEmail]       = useState('');
+  const [password, setPassword] = useState('');
+  const [balance, setBalance]   = useState(0);
+  const ctx = useContext(UserContext);
 
-  const register = async () => {
+// firestore database logic
+  const createUserDocument = async () => {
+    try {
+      const docRef = await addDoc(collection(db,'users'), {
+        name: name,
+        email: email,
+        balance: balance,
+        password: password
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    }
+// firebase auth logic
+  const authenticateUser = async () => {
     try {
       const user = await createUserWithEmailAndPassword(
         auth,
-        name,
         email,
-        password,
-        balance
+        password
       );
-      console.log(user);
-    } catch (error) {
+      if (user.user.accessToken){
+      console.log(user.user.accessToken)
+      localStorage.setItem('user', JSON.stringify(user))
+      console.log(localStorage.user)
+      }
+      } catch (error) {
       console.log(error.message);
+      setShow(false)
     }
-  };
+   };
 
 
   function handle() {
@@ -56,7 +77,8 @@ function CreateForm(props){
     ctx.users.push({name,email,password,balance});
     setBalance(0)
     setStatus('')
-    register()
+    createUserDocument()
+    authenticateUser()
     props.setShow(false);
   }    
 
@@ -90,6 +112,7 @@ return false;
 }
 handle();
 }
+ 
 
   return (<>
     Name<br/>
@@ -117,5 +140,5 @@ handle();
       className="btn btn-light" 
       onClick={validate}>Create Account</button>
   </>);
+    }
   }
-}

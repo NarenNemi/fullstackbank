@@ -1,5 +1,6 @@
-import { React } from "react";
-import { HashRouter, Route, Routes } from 'react-router-dom'
+
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Home } from "./home";
 import { CreateAccount } from "./createaccount";
 import { Login } from "./login"
@@ -7,37 +8,59 @@ import { Deposit } from "./deposit";
 import { Withdraw } from "./withdraw"
 import { Balance } from "./balance";
 import { AllData } from "./alldata";
-import { NavBar } from "./navbar";
-import { UserContext } from "./context";
+import { NavBar, DisplayNavbar } from "./navbar";
+import { UserContext, LoginContext } from "./context";
 import ReactDOM from "react-dom/client";
 import 'bootstrap/dist/css/bootstrap.css'
 import "bootstrap" 
 
-
+/*
+  const ctx = useContext(UserContext); 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const DisplayNavbar = () => {
+      if(isAuthenticated){
+        return {enablednav}
+      } else {
+return {disablednav}>
+   }
+  }
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+        ctx.setUser(currentUser);
+        if(currentUser){
+          setIsAuthenticated(true);
+        }
+    });
+}, []) 
+*/
 
 function Spa() {
+
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div>
-        <NavBar/>        
-        <UserContext.Provider value={{users:[{name:'matty',email:'test.test@gmail.com',password:'secret',balance:100}]}}>
-        <div className="container" style={{padding: "20px"}}>
+      <DisplayNavbar>
+          <div className="container" style={{padding: "20px"}}>
           <Routes>
-            <Route path="/" exact component={Home} />
-            <Route path="/CreateAccount/" component={CreateAccount} />
-            <Route path="/login/" component={Login} />
-            <Route path="/deposit/" component={Deposit} />
-            <Route path="/withdraw/" component={Withdraw} />
-            <Route path="/balance/" component={Balance} />
-            <Route path="/alldata/" component={AllData} />
-          </Routes>
+            <Route path="/"  element={<Home/>} />
+            <Route path="/CreateAccount" element={<CreateAccount/>} />
+            <Route path="/login" element={<Login/>} />
+            <Route path="/deposit" element={<Deposit/>} />
+            <Route path="/withdraw" element={<Withdraw/>} />
+            <Route path="/balance" element={<Balance/>} />
+            <Route path="/alldata" element={<AllData/>} />
+            </Routes>
           </div>
-        </UserContext.Provider>
+          </DisplayNavbar>
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(<Spa/>);
+
+
+// ={<CreateAccount isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>}

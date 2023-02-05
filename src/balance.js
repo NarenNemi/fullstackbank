@@ -1,10 +1,9 @@
-import { Card } from "./context";
-import { React, UserContext } from "react";
-
+import { useContext, useState } from "react";
+import { Card, UserContext } from "./context";
 
  export function Balance(){
-  const [show, setShow]     = React.useState(true);
-  const [status, setStatus] = React.useState('');  
+  const [show, setShow]     = useState(true);
+  const [status, setStatus] = useState('');  
 
   return (
     <Card
@@ -30,9 +29,10 @@ function BalanceMsg(props){
 }
 
 function BalanceForm(props){
-  const [email, setEmail]   = React.useState('');
-  const [balance, setBalance] = React.useState();  
-  const ctx = React.useContext(UserContext);  
+  const [email, setEmail]   = useState('');
+  const [balance, setBalance] = useState();  
+  
+  const ctx = useContext(UserContext);  
 
   function handle(){
     const user = ctx.users.find((user) => user.email === email);

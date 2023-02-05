@@ -1,9 +1,9 @@
-import { Card } from "./context";
-import { useState, React, UserContext } from "react";
+import { useState,  useContext } from "react";
+import { Card, UserContext } from "./context";
 
 export function Withdraw(){
-  const [show, setShow]     = React.useState(true);
-  const [status, setStatus] = React.useState('');  
+  const [show, setShow]     = useState(true);
+  const [status, setStatus] = useState('');  
   
 
   return (
@@ -30,14 +30,14 @@ function WithdrawMsg(props){
 }
 
 function WithdrawForm(props){
-  const [email, setEmail]   = React.useState('');
-  const [amount, setAmount] = React.useState('');
-  const [balance, setBalance]   = React.useState();
-  const ctx = React.useContext(UserContext);  
+  const [email, setEmail]   = useState('');
+  const [amount, setAmount] = useState('');
+  const [balance, setBalance]   = useState();
+  const ctx = useContext(UserContext);  
 
   function handle(){
     console.log(email,amount);
-    const user = ctx.users.find((user) => user.email ==+ email);
+    const user = ctx.users.find((user) => user.email === email);
     if (!user) {
       props.setStatus('fail!')      
       return;      

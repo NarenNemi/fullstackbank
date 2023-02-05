@@ -1,10 +1,10 @@
-import { Card } from "./context";
-import { useState, React, UserContext } from "react";
+import { Card, UserContext } from "./context";
+import {useState, useContext } from "react";
 
 
  export function Deposit() {
-  const [show, setShow]     = React.useState(true);
-  const [status, setStatus] = React.useState('');  
+  const [show, setShow]     = useState(true);
+  const [status, setStatus] = useState('');  
 
   return (
     <Card
@@ -31,11 +31,11 @@ function DepositMsg(props){
 } 
 
 function DepositForm(props){
-  const [email, setEmail]   = React.useState('');
-  const [amount, setAmount] = React.useState('');
-  const [balance, setBalance] = React.useState();
+  const [email, setEmail]   = useState('');
+  const [amount, setAmount] = useState('');
+  const [balance, setBalance] = useState();
   
-  const ctx = React.useContext(UserContext);  
+  const ctx = useContext(UserContext);  
 
   function handle(){
     console.log(email,amount);

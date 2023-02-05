@@ -1,9 +1,9 @@
-import { React, UserContext } from "react";
-import { Card } from "./context";
+import { useContext } from "react";
+import { Card, UserContext } from "./context";
 
 
  function UserData(){
- const {users} = React.useContext(UserContext);
+ const {users} = useContext(UserContext);
  console.log(users)
  const userArray = users.map((user) => {
 return (<div>
@@ -19,7 +19,7 @@ return (<div>
 
 
 export function AllData(){
-  //const ctx = React.useContext(UserContext);
+  const ctx = useContext(UserContext);
   UserData()
   return (
     <Card

@@ -1,7 +1,7 @@
 import { createContext, React } from "react";
 
-
-export const UserContext = createContext()
+export const LoginContext = createContext(false);
+export const UserContext = createContext({})
 
  export function Card(props){
   function classes(){

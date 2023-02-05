@@ -1,4 +1,4 @@
-import { Card } from "./context";
+import { Card, } from "./context";
 
 export function Home(){
   return (
