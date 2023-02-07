@@ -53,6 +53,8 @@ function WithdrawForm(props){
     props.setShow(false);
   }
 
+//change code above to use getDocs from firbase and create a function that subtract the amount to the value in collection
+
   return(<>
 
     Email<br/>

@@ -3,19 +3,19 @@ import { Card, UserContext } from "./context";
 import { auth, db } from "./firebase-confing";
 import {  signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore"; 
+import { async } from "@firebase/util";
 
 
 export function Login(){
   const [show, setShow]     = useState(true);
   const [status, setStatus] = useState('');    
   const [user, setUser]     = useState('');
-  const [authUser, setAuthUser] = useState('')
 
   // const [loggedIn, setLoggedIn] = useState();
   // useref value for the navbar
-   let isLoggedin = useRef(false)
+  let isLoggedin = useRef(false)
 
-   const retrieveUser = async () => {
+  const retrieveUser = async () => {
   const querySnapshot = await getDocs(collection(db, "users"));
   querySnapshot.forEach((doc) => {
     console.log(`${doc.id} => ${doc.data()}`);
@@ -64,31 +64,31 @@ function LoginForm(props){
   
 //const ctx = useContext(UserContext) ; 
 
+function handle(){ 
+  props.setStatus('')
+  isLoggedin = true
+  console.log(isLoggedin)
+  retrieveUser()
+  setShow(false);
+  //console.log(user)
+  //console.log(user.email, user.password)
+  }
+
 //firebase signIn function 
 //i would like to add error handling
-const firelogin = () => {
+const firelogin = async () => {
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     console.log(userCredential);
+    handle();
   })
   .catch((error) => {
     console.log(error);
-    setShow(true);
     setStatus('invalid user')
   })
 };
 
 //
-function handle(){ 
-props.setStatus('')
-firelogin(user)
-isLoggedin = true
-console.log(isLoggedin)
-retrieveUser()
-//console.log(user)
-//console.log(user.email, user.password)
-}
-
   //login form
   return (<>
 
@@ -105,7 +105,7 @@ retrieveUser()
       placeholder="Enter password" 
       value={password} 
       onChange={e => setPassword(e.currentTarget.value)}/><br/>
-    <button type="submit" className="btn btn-light" onClick={handle}>Login</button>
+    <button type="submit" className="btn btn-light" onClick={firelogin}>Login</button>
   </>);
     }
   };

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+// use this function to change the navbar once someone is disabled 
  export function DisplayNavbar() { 
 if (window.localStorage.uid !== null) {
   return NavBar;
@@ -9,7 +10,7 @@ if (window.localStorage.uid !== null) {
 }
 
 
-
+//add user's name to the navbar
 export function NavBar(){
 
   return(

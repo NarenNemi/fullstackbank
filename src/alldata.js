@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { Card, UserContext } from "./context";
 
+//!!!!!
 
+//withdraw users dat from the firebase db instead of context
 export function UserData(){
   const {users} = useContext(UserContext);
  // const users = useContext();

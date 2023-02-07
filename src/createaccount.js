@@ -1,4 +1,4 @@
-import { Card, UserContext, AuthContext } from "./context";
+import { Card, UserContext } from "./context";
 import {useState, useContext } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./firebase-confing";
@@ -44,7 +44,7 @@ function CreateForm(props){
       const docRef = await addDoc(collection(db,'users'), {
         name: name,
         email: email,
-        balance: balance,
+        number: balance,
         password: password,
       });
       console.log("Document written with ID: ", docRef.id);
@@ -52,8 +52,9 @@ function CreateForm(props){
       console.error("Error adding document: ", e);
     }
     }
+  
 
-    const createFireUser = () => {
+    const createFireUser = async () => {
       createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
@@ -73,7 +74,6 @@ function CreateForm(props){
     createFireUser()
     createUserDocument()
     props.setShow(false);
-    
   }    
 
 function validate() {

@@ -49,6 +49,8 @@ function DepositForm(props){
     props.setStatus(`Your balance is: ${user.balance}`);      
     props.setShow(false);
   }
+// change code above to use getDocs from firbase and create a function that add the amount to the value in collection
+
 
   return(<>
 
