@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import { Card, UserContext } from "./context";
 import { auth, db } from "./firebase-confing";
-import {  signOut, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {  signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore"; 
 
 
@@ -28,8 +28,6 @@ export function Login(){
     });
 }, [])
 */
-
-
   return (
     <Card
       bgcolor="primary"
@@ -53,12 +51,7 @@ function LoginMsg(props){
 //logout form
   return(<>
     <h5>Success</h5>
-    <button type="submit" 
-      className="btn btn-light" 
-      onClick={() => props.setShow(true)}>
-        Authenticate again
-    </button>
-    <button className="btn btn-dark"
+    <button className="btn btn-light"
     onClick={logout}>
       Logout
     </button>
@@ -69,16 +62,58 @@ function LoginForm(props){
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   
-  const ctx = useContext(UserContext);  
+//const ctx = useContext(UserContext) ; 
 
-//firebase login logic
+//firebase signIn function 
+//i would like to add error handling
+const firelogin = () => {
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    console.log(userCredential);
+  })
+  .catch((error) => {
+    console.log(error);
+    setShow(true);
+    setStatus('invalid user')
+  })
+};
+
+//
+function handle(){ 
+props.setStatus('')
+firelogin(user)
+isLoggedin = true
+console.log(isLoggedin)
+retrieveUser()
+//console.log(user)
+//console.log(user.email, user.password)
+}
+
+  //login form
+  return (<>
+
+    Email<br/>
+    <input type="input" 
+      className="form-control" 
+      placeholder="Enter email" 
+      value={email} 
+      onChange={e => setEmail(e.currentTarget.value)}/><br/>
+
+    Password<br/>
+    <input type="password" 
+      className="form-control" 
+      placeholder="Enter password" 
+      value={password} 
+      onChange={e => setPassword(e.currentTarget.value)}/><br/>
+    <button type="submit" className="btn btn-light" onClick={handle}>Login</button>
+  </>);
+    }
+  };
+
+/* old firebase login logic
   const firelogin = async () => {
     try {
-      const signIn = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const signIn = await signInWithEmailAndPassword(auth, email, password);
       console.log(signIn);
       console.log(signIn.user)
       //setAuthUser(signIn.user)
@@ -87,16 +122,19 @@ function LoginForm(props){
       console.log(error.message);
     }
   }
-// stringifying the myCountryInfo object and 
-// storing it in the localStorage
+*/
 
-  //login button logic
+
+
+
+
+  /*
+  //old validation login button logic
     function handle(){
-      const authUser = window.localStorage.getItem('user');
       //const user = ctx.users.find((user) => user.email === email);
       console.log(authUser.uid);
       console.log(email, password);
-      if (!user) {
+      if (user.email !== email) {
         console.log('wrong username')
         props.setStatus('incorrect user')      
         return setShow(true);      
@@ -116,27 +154,4 @@ function LoginForm(props){
       return setShow(false);
      }
   }
-  //login form
-  return (<>
-
-    Email<br/>
-    <input type="input" 
-      className="form-control" 
-      placeholder="Enter email" 
-      value={email} 
-      onChange={e => setEmail(e.currentTarget.value)}/><br/>
-
-    Password<br/>
-    <input type="password" 
-      className="form-control" 
-      placeholder="Enter password" 
-      value={password} 
-      onChange={e => setPassword(e.currentTarget.value)}/><br/>
-    <button type="submit" className="btn btn-light" onClick={handle}>Login</button>
-    <button type="submit" className="btn btn-dark">Login with Google</button>
-  </>);
-    }
-  };
-
-
-
+  */

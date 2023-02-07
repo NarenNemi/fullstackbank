@@ -1,5 +1,3 @@
-
-import { useState } from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Home } from "./home";
 import { CreateAccount } from "./createaccount";
@@ -8,11 +6,12 @@ import { Deposit } from "./deposit";
 import { Withdraw } from "./withdraw"
 import { Balance } from "./balance";
 import { AllData } from "./alldata";
-import { NavBar, DisplayNavbar } from "./navbar";
-import { UserContext, LoginContext } from "./context";
+import { NavBar } from "./navbar";
+import { UserContext } from './context';
+import { React } from "react";
 import ReactDOM from "react-dom/client";
 import 'bootstrap/dist/css/bootstrap.css'
-import "bootstrap" 
+
 
 /*
   const ctx = useContext(UserContext); 
@@ -34,12 +33,13 @@ return {disablednav}>
 }, []) 
 */
 
-function Spa() {
 
+function Spa() {
   return (
     <BrowserRouter>
       <div>
-      <DisplayNavbar>
+      <NavBar/>
+      <UserContext.Provider value={{users:[{name:'marilena',email:'testz@gmail.com',password:'secret',balance:100}]}}>
           <div className="container" style={{padding: "20px"}}>
           <Routes>
             <Route path="/"  element={<Home/>} />
@@ -50,17 +50,12 @@ function Spa() {
             <Route path="/balance" element={<Balance/>} />
             <Route path="/alldata" element={<AllData/>} />
             </Routes>
-          </div>
-          </DisplayNavbar>
+            </div>
+            </UserContext.Provider>
       </div>
     </BrowserRouter>
   );
 }
-
-
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(<Spa/>);
-
-
-// ={<CreateAccount isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>}

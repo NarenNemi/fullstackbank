@@ -1,4 +1,4 @@
-import { Card, UserContext } from "./context";
+import { Card, UserContext, AuthContext } from "./context";
 import {useState, useContext } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./firebase-confing";
@@ -9,7 +9,6 @@ import { collection, addDoc } from "firebase/firestore";
  export function CreateAccount(){
   const [show, setShow]     = useState(true);
   const [status, setStatus] = useState('');
-  //const [token, setToken] = useState('');
   
   return (
     <Card
@@ -37,6 +36,7 @@ function CreateForm(props){
   const [password, setPassword] = useState('');
   const [balance, setBalance]   = useState(0);
   const ctx = useContext(UserContext);
+  
 
 // firestore database logic
   const createUserDocument = async () => {
@@ -45,31 +45,24 @@ function CreateForm(props){
         name: name,
         email: email,
         balance: balance,
-        password: password
+        password: password,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
     }
-// firebase auth logic
-  const authenticateUser = async () => {
-    try {
-      const user = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      if (user.user.accessToken){
-      console.log(user.user.accessToken)
-      localStorage.setItem('user', JSON.stringify(user))
-      console.log(localStorage.user)
-      }
-      } catch (error) {
-      console.log(error.message);
-      setShow(false)
-    }
-   };
+
+    const createFireUser = () => {
+      createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShow(false);
+      })
+    };
 
 
   function handle() {
@@ -77,9 +70,10 @@ function CreateForm(props){
     ctx.users.push({name,email,password,balance});
     setBalance(0)
     setStatus('')
+    createFireUser()
     createUserDocument()
-    authenticateUser()
     props.setShow(false);
+    
   }    
 
 function validate() {
@@ -142,3 +136,20 @@ handle();
   </>);
     }
   }
+
+  /* old firebase auth logic
+  const createAuthenticateUser = async () => {
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      if (user.user.accessToken){
+        console.log(user.user.accessToken)
+        console.log(user.user.uid)
+        localStorage.setItem('uid',(user.user.uid))
+      //console.log(token)
+      }
+      } catch (error) {
+      console.log(error.message);
+      setShow(false)
+    }
+   };
+*/
